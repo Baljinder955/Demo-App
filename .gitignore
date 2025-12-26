@@ -1,0 +1,47 @@
+### Xcode ###
+DerivedData/
+build/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+project.xcworkspace/xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+
+### Swift Package Manager ###
+.swiftpm/
+.build/
+
+### CocoaPods ###
+Pods/
+Podfile.lock
+podfile.lock
+*.xcconfig
+
+### Carthage ###
+Carthage/
+Build/
+
+### Fastlane ###
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/readme.md
+
+### Archives ###
+*.xcarchive
+
+### General ###
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.swp
+*.tmp
+
+### Key files (never commit) ###
+*.p8
+*.mobileprovision
+*.cer
+*.key
+Secrets/
