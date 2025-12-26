@@ -5,50 +5,81 @@ pipeline {
         PROJECT = "SpeechToText.xcodeproj"
         SCHEME = "SpeechToText"
         DESTINATION = "platform=iOS Simulator,name=iPhone 14"
+        DERIVED_DATA = "${WORKSPACE}/DerivedData"
     }
 
     stages {
 
         stage("Checkout Code") {
             steps {
+                echo "📥 Checking out code from GitHub repository..."
                 git branch: 'main', url: 'https://github.com/Baljinder955/Demo-App.git'
+                echo "✅ Checkout complete!"
+            }
+        }
+
+        stage("Prepare Simulator") {
+            steps {
+                echo "📱 Booting / preparing iPhone 14 simulator..."
+                sh '''
+                xcrun simctl bootstatus "iPhone 14" --timeout 60 || \
+                xcrun simctl boot "iPhone 14" || true
+                '''
+                echo "📱 Simulator ready!"
             }
         }
 
         stage("Install Dependencies") {
             steps {
-                sh "pod install || true"     // ignore if no Podfile
+                echo "📦 Installing Cocoapods (if Podfile exists)..."
+                sh "pod install || true"    // won't fail if no Podfile
+                echo "📦 Dependency installation DONE (or skipped)."
             }
         }
 
-        stage("Build App") {
+        stage("Build App (No Signing)") {
             steps {
+                echo "🔨 Starting build process for $SCHEME ..."
                 sh """
                 xcodebuild \
                 -project "$PROJECT" \
                 -scheme "$SCHEME" \
                 -sdk iphonesimulator \
                 -destination '$DESTINATION' \
-                build
+                -derivedDataPath "$DERIVED_DATA" \
+                CODE_SIGNING_ALLOWED=NO \
+                clean build
                 """
+                echo "🧱 Build complete!"
             }
         }
 
         stage("Run Tests") {
             steps {
+                echo "🧪 Running tests on $DESTINATION ..."
                 sh """
                 xcodebuild test \
                 -project "$PROJECT" \
                 -scheme "$SCHEME" \
                 -sdk iphonesimulator \
-                -destination '$DESTINATION'
+                -destination '$DESTINATION' \
+                -derivedDataPath "$DERIVED_DATA" \
+                CODE_SIGNING_ALLOWED=NO
                 """
+                echo "🧪 Tests finished!"
             }
         }
     }
 
     post {
-        success { echo "🎉 Success: Demo App pipeline finished!" }
-        failure { echo "❌ Pipeline failed — check the logs!" }
+        success {
+            echo "🎉 SUCCESS: Demo App pipeline finished successfully!"
+        }
+        failure {
+            echo "❌ FAILURE: Pipeline failed — please check above logs!"
+        }
+        always {
+            echo "🔚 Pipeline completed (success or fail)."
+        }
     }
 }
