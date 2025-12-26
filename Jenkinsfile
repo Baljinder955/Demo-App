@@ -18,16 +18,16 @@ pipeline {
             }
         }
 
-        stage("Prepare Simulator") {
-            steps {
-                echo "📱 Booting / preparing iPhone 14 simulator..."
-                sh '''
-                xcrun simctl bootstatus "iPhone 14" --timeout 60 || \
-                xcrun simctl boot "iPhone 14" || true
-                '''
-                echo "📱 Simulator ready!"
-            }
-        }
+
+	stage("Prepare Simulator") {
+    steps {
+        echo "📱 Booting Simulator..."
+        sh '''
+        timeout 30 xcrun simctl boot "iPhone SE (2nd generation)" || true
+        xcrun simctl bootstatus "iPhone SE (2nd generation)" --timeout 15 || true
+        '''
+    }
+}
 
         stage("Install Dependencies") {
             steps {
