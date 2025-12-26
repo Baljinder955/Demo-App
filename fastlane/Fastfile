@@ -1,0 +1,68 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+
+default_platform(:ios)
+
+platform :ios do
+
+  ######################################################
+  # 🚀 CI Build Lane (NO signing, NO export)
+  ######################################################
+  desc "🏗️ Build the app for CI (no signing)"
+  lane :build_ci do
+    gym(
+      project: "SpeechToText.xcodeproj",   # or workspace: "SpeechToText.xcworkspace"
+      scheme: "SpeechToText",
+      configuration: "Debug",
+      clean: true,
+      skip_archive: false,
+      skip_codesigning: true,              # 🔥 correct key
+      export_method: nil
+    )
+    UI.success("🎉 CI Build Completed (No Signing)")
+  end
+
+
+  ######################################################
+  # 🧪 Test Lane (renamed to avoid conflict)
+  ######################################################
+  desc "🧪 Run tests for CI"
+  lane :ci_tests do
+    scan(
+      project: "SpeechToText.xcodeproj",   # or workspace if needed
+      scheme: "SpeechToText",
+      clean: true
+    )
+    UI.success("🧪 Test execution completed")
+  end
+
+
+  ######################################################
+  # 👨‍💻 Local Build (optional)
+  ######################################################
+  desc "👨‍💻 Local debug build"
+  lane :build_local do
+    gym(
+      project: "SpeechToText.xcodeproj",
+      scheme: "SpeechToText",
+      configuration: "Debug",
+      skip_codesigning: true,
+      export_method: nil
+    )
+    UI.message("📦 Local build done")
+  end
+
+end
