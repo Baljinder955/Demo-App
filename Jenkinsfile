@@ -4,82 +4,91 @@ pipeline {
     environment {
         PROJECT = "SpeechToText.xcodeproj"
         SCHEME = "SpeechToText"
-        DESTINATION = "platform=iOS Simulator,name=iPhone 16e"
+        DEVICE = "iPhone 16e"
+        DESTINATION = "platform=iOS Simulator,name=iPhone 16e,OS=latest"
         DERIVED_DATA = "${WORKSPACE}/DerivedData"
+        PATH = "/opt/homebrew/bin:/usr/local/bin:$PATH" // ensures pod & xcode tools found
     }
 
     stages {
 
         stage("Checkout Code") {
             steps {
-                echo "📥 Checking out code from GitHub repository..."
+                echo "📥 Checking out code from GitHub..."
                 git branch: 'main', url: 'https://github.com/Baljinder955/Demo-App.git'
-                echo "✅ Checkout complete!"
+                echo "✅ Code Checkout Done!"
             }
         }
 
+        stage("Prepare Simulator") {
+            steps {
+                echo "📱 Preparing iOS Simulator..."
+                sh """
+                echo "🔍 Available simulators:"
+                xcrun simctl list devices
 
-	stage("Prepare Simulator") {
-    steps {
-        echo "📱 Booting Simulator..."
-        sh '''
-        timeout 30 xcrun simctl boot "iPhone SE (2nd generation)" || true
-        xcrun simctl bootstatus "iPhone SE (2nd generation)" --timeout 15 || true
-        '''
-    }
-}
+                echo "📱 Booting $DEVICE ..."
+                xcrun simctl boot "$DEVICE" || true
+                sleep 5
+                xcrun simctl bootstatus "$DEVICE" --timeout 20 || true
+                echo "📱 Simulator ready!"
+                """
+            }
+        }
 
         stage("Install Dependencies") {
             steps {
-                echo "📦 Installing Cocoapods (if Podfile exists)..."
-                sh "pod install || true"    // won't fail if no Podfile
-                echo "📦 Dependency installation DONE (or skipped)."
+                echo "📦 Installing Pods (if Podfile exists)..."
+                sh """
+                if [ -f "Podfile" ]; then
+                  echo "➡️ Podfile found — running pod install"
+                  pod install
+                else
+                  echo "⚠️ No Podfile — skipping pod install"
+                fi
+                """
+                echo "📦 Dependencies step finished!"
             }
         }
 
         stage("Build App (No Signing)") {
             steps {
-                echo "🔨 Starting build process for $SCHEME ..."
+                echo "🔨 Building the app..."
                 sh """
-                xcodebuild \
+                time xcodebuild \
                 -project "$PROJECT" \
                 -scheme "$SCHEME" \
                 -sdk iphonesimulator \
-                -destination '$DESTINATION' \
+                -destination "$DESTINATION" \
                 -derivedDataPath "$DERIVED_DATA" \
                 CODE_SIGNING_ALLOWED=NO \
-                clean build
+                clean build | xcpretty
                 """
-                echo "🧱 Build complete!"
+                echo "🧱 App Build Success!"
             }
         }
 
         stage("Run Tests") {
             steps {
-                echo "🧪 Running tests on $DESTINATION ..."
+                echo "🧪 Running tests..."
                 sh """
-                xcodebuild test \
+                time xcodebuild \
+                test \
                 -project "$PROJECT" \
                 -scheme "$SCHEME" \
                 -sdk iphonesimulator \
-                -destination '$DESTINATION' \
+                -destination "$DESTINATION" \
                 -derivedDataPath "$DERIVED_DATA" \
-                CODE_SIGNING_ALLOWED=NO
+                CODE_SIGNING_ALLOWED=NO | xcpretty
                 """
-                echo "🧪 Tests finished!"
+                echo "🧪 Test Stage Finished!"
             }
         }
     }
 
     post {
-        success {
-            echo "🎉 SUCCESS: Demo App pipeline finished successfully!"
-        }
-        failure {
-            echo "❌ FAILURE: Pipeline failed — please check above logs!"
-        }
-        always {
-            echo "🔚 Pipeline completed (success or fail)."
-        }
+        success { echo "🎉 SUCCESS: Pipeline finished successfully!" }
+        failure { echo "❌ ERROR: Pipeline failed — check logs!" }
+        always  { echo "🔚 Pipeline execution complete." }
     }
 }
