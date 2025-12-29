@@ -4,77 +4,71 @@ pipeline {
     environment {
         PROJECT = "SpeechToText.xcodeproj"
         SCHEME = "SpeechToText"
-        DEVICE = "iPhone 16e"
-        DESTINATION = "platform=iOS Simulator,name=iPhone 16e,OS=latest"
         DERIVED_DATA = "${WORKSPACE}/DerivedData"
+        PATH = "${env.PATH}:/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin"
     }
 
     stages {
 
         stage("Checkout Code") {
             steps {
-                echo "📥 Checking out code from GitHub..."
+                echo "📥 Checking out code..."
                 git branch: 'main', url: 'https://github.com/Baljinder955/Demo-App.git'
-                echo "✅ Code Checkout Done!"
+                echo "🟢 Checkout complete!"
             }
         }
 
-        stage("Fix PATH for Jenkins") {
+        stage("Build (Simulator - No Signing)") {
             steps {
-                echo "🔧 Fixing PATH so xcpretty & brew work..."
-                sh '''
-                  export PATH="/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
-                  which xcpretty || echo "🚨 xcpretty not found in PATH"
-                  which xcodebuild || echo "🚨 xcodebuild not found in PATH"
-                '''
+                echo "🔨 Building for Simulator..."
+                sh """
+                xcodebuild \
+                -project "$PROJECT" \
+                -scheme "$SCHEME" \
+                -sdk iphonesimulator \
+                CODE_SIGNING_ALLOWED=NO \
+                clean build | xcpretty
+                """
+                echo "🟣 Simulator build done!"
             }
         }
-        
-        stage("Prepare Simulator") {
+
+        stage("Archive (Unsigned IPA)") {
             steps {
-                echo "📱 Preparing iOS Simulator..."
+                echo "📦 Archiving for IPA export (no signing)..."
                 sh """
-                xcrun simctl list devices
-                xcrun simctl boot "$DEVICE" || true
-                sleep 5
-                xcrun simctl bootstatus "$DEVICE" || true
+                xcodebuild \
+                -project "$PROJECT" \
+                -scheme "$SCHEME" \
+                -sdk iphoneos \
+                -configuration Release \
+                -archivePath "$WORKSPACE/build/$SCHEME.xcarchive" \
+                CODE_SIGNING_ALLOWED=NO \
+                CODE_SIGNING_REQUIRED=NO \
+                CODE_SIGN_IDENTITY="" \
+                archive | xcpretty
                 """
             }
         }
 
-        stage("Install Dependencies") {
+        stage("Export IPA (Unsigned)") {
             steps {
-                echo "📦 Checking Podfile..."
+                echo "📦 Exporting unsigned IPA..."
                 sh """
-                if [ -f Podfile ]; then pod install; fi
+                xcodebuild -exportArchive \
+                -archivePath "$WORKSPACE/build/$SCHEME.xcarchive" \
+                -exportPath "$WORKSPACE/build/ipa" \
+                -exportOptionsPlist ExportOptions.plist \
+                CODE_SIGNING_ALLOWED=NO | xcpretty
                 """
-            }
-        }
-
-        stage("Build App (No Signing)") {
-            steps {
-                echo "🔨 Building the app..."
-                sh """
-                export PATH="/Users/baljindernetset/.gem/ruby/3.2.0/bin:$PATH"
-                xcodebuild -project "$PROJECT" -scheme "$SCHEME" -sdk iphonesimulator -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO clean build | xcpretty
-                """
-            }
-        }
-
-        stage("Run Tests") {
-            steps {
-                echo "🧪 Running tests..."
-                sh """
-                export PATH="/Users/baljindernetset/.gem/ruby/3.2.0/bin:$PATH"
-                xcodebuild test -project "$PROJECT" -scheme "$SCHEME" -sdk iphonesimulator -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO | xcpretty
-                """
+                echo "🎉 Unsigned IPA created → build/ipa/"
             }
         }
     }
 
     post {
-        success { echo "🎉 SUCCESS: Local CI OK!" }
-        failure { echo "❌ ERROR: Pipeline failed — check logs!" }
-        always  { echo "🔚 Pipeline done." }
+        success { echo "🎯 SUCCESS — Unsigned IPA Ready!" }
+        failure { echo "❌ FAILED — Check logs!" }
+        always { echo "🔚 Pipeline Completed" }
     }
 }
