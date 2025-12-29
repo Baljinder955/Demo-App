@@ -5,7 +5,9 @@ pipeline {
         PROJECT = "SpeechToText.xcodeproj"
         SCHEME = "SpeechToText"
         DERIVED_DATA = "${WORKSPACE}/DerivedData"
-        "PATH+EXTRA" = "/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin"
+
+        // Append custom paths correctly
+        PATH = "${env.PATH}:/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin"
     }
 
     stages {
@@ -21,7 +23,7 @@ pipeline {
             steps {
                 echo "⚙️  Checking build dependencies..."
                 sh '''
-                    which xcodebuild
+                    echo "Xcode at: $(which xcodebuild)"
                     which xcpretty || gem install xcpretty
                 '''
             }
