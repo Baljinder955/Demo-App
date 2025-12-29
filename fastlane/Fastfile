@@ -18,22 +18,22 @@ default_platform(:ios)
 
 platform :ios do
 
-  ######################################################
-  # 🚀 CI Build Lane (NO signing, NO export)
-  ######################################################
-  desc "🏗️ Build the app for CI (no signing)"
-  lane :build_ci do
-    gym(
-      project: "SpeechToText.xcodeproj",   # or workspace: "SpeechToText.xcworkspace"
+  desc "Build and export signed IPA (Development)"
+  lane :ci_signed do
+    build_app(
       scheme: "SpeechToText",
-      configuration: "Debug",
-      clean: true,
-      skip_archive: false,
-      skip_codesigning: true,              # 🔥 correct key
-      export_method: nil
+      workspace: "SpeechToText.xcodeproj", 
+      export_method: "development",
+      export_options: {
+        provisioningProfiles: {
+          "com.netset.test" => "Xcode Managed Profile"
+        }
+      }
     )
-    UI.success("🎉 CI Build Completed (No Signing)")
   end
+
+end
+
 
 
   ######################################################
