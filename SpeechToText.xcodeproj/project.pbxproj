@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		17A5976C2EFE9ACB00803DDB /* Gemfile.lock in Resources */ = {isa = PBXBuildFile; fileRef = 17A597692EFE9ACB00803DDB /* Gemfile.lock */; };
-		17A5976D2EFE9ACB00803DDB /* eval "$(ssh-agent -s)".pub in Resources */ = {isa = PBXBuildFile; fileRef = 17A597622EFE9ACB00803DDB /* eval "$(ssh-agent -s)".pub */; };
-		17A5976E2EFE9ACB00803DDB /* eval "$(ssh-agent -s)" in Resources */ = {isa = PBXBuildFile; fileRef = 17A597612EFE9ACB00803DDB /* eval "$(ssh-agent -s)" */; };
 		17A5976F2EFE9ACB00803DDB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 17A5976B2EFE9ACB00803DDB /* README.md */; };
 		17A597722EFE9ACB00803DDB /* Gemfile in Resources */ = {isa = PBXBuildFile; fileRef = 17A597682EFE9ACB00803DDB /* Gemfile */; };
 		17A597742EFE9ACB00803DDB /* Jenkinsfile in Resources */ = {isa = PBXBuildFile; fileRef = 17A5976A2EFE9ACB00803DDB /* Jenkinsfile */; };
@@ -17,8 +15,6 @@
 
 /* Begin PBXFileReference section */
 		1749352E2EFBEEB500DA5C4C /* SpeechToText.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeechToText.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		17A597612EFE9ACB00803DDB /* eval "$(ssh-agent -s)" */ = {isa = PBXFileReference; lastKnownFileType = text; path = "eval \"$(ssh-agent -s)\""; sourceTree = "<group>"; };
-		17A597622EFE9ACB00803DDB /* eval "$(ssh-agent -s)".pub */ = {isa = PBXFileReference; lastKnownFileType = text; path = "eval \"$(ssh-agent -s)\".pub"; sourceTree = "<group>"; };
 		17A597682EFE9ACB00803DDB /* Gemfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gemfile; sourceTree = "<group>"; };
 		17A597692EFE9ACB00803DDB /* Gemfile.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gemfile.lock; sourceTree = "<group>"; };
 		17A5976A2EFE9ACB00803DDB /* Jenkinsfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Jenkinsfile; sourceTree = "<group>"; };
@@ -71,8 +67,6 @@
 			isa = PBXGroup;
 			children = (
 				17A597602EFE9ACB00803DDB /* build */,
-				17A597612EFE9ACB00803DDB /* eval "$(ssh-agent -s)" */,
-				17A597622EFE9ACB00803DDB /* eval "$(ssh-agent -s)".pub */,
 				17A597672EFE9ACB00803DDB /* fastlane */,
 				17A597682EFE9ACB00803DDB /* Gemfile */,
 				17A597692EFE9ACB00803DDB /* Gemfile.lock */,
@@ -159,8 +153,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				17A5976C2EFE9ACB00803DDB /* Gemfile.lock in Resources */,
-				17A5976D2EFE9ACB00803DDB /* eval "$(ssh-agent -s)".pub in Resources */,
-				17A5976E2EFE9ACB00803DDB /* eval "$(ssh-agent -s)" in Resources */,
 				17A5976F2EFE9ACB00803DDB /* README.md in Resources */,
 				17A597722EFE9ACB00803DDB /* Gemfile in Resources */,
 				17A597742EFE9ACB00803DDB /* Jenkinsfile in Resources */,
@@ -172,8 +164,8 @@
 /* Begin PBXShellScriptBuildPhase section */
 		0869A33A59BC49A08EA5DE54 /* Link Bundle Executable */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
 			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
@@ -185,9 +177,10 @@
 			);
 			outputPaths = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A45ED5A}\"";
-			showEnvVarsInLog = 0;			
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A45ED5A}\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
