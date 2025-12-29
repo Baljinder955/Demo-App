@@ -281,7 +281,6 @@ GEM
     simctl (1.6.10)
       CFPropertyList
       naturally
-    slack-notifier (2.4.0)
     sysrandom (1.0.5)
     terminal-notifier (2.0.0)
     terminal-table (3.0.2)
@@ -328,11 +327,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods (~> 1.14)
-  dotenv
-  fastimage
   fastlane (~> 2.230.0)
-  slack-notifier
-  terminal-notifier
   xcode-install
   xcpretty
 

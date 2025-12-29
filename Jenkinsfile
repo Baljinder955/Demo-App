@@ -36,15 +36,15 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                echo "📦 Installing bundler & gems..."
-                sh 'gem install bundler || true'
-                sh 'bundle config set path "vendor/bundle"'
-                sh 'bundle install || true'
-                echo "📌 Dependencies OK!"
-            }
-        }
+        stage('Install Dependencies (CI Minimal)') {
+    steps {
+        echo '📦 Skipping heavy gem dependencies for CI'
+        sh 'bundle config set without "development test cocoa cocoapods"'
+        sh 'bundle install || true'
+        echo '📌 Gems installed (ignoring native build failures)'
+    }
+}
+
 
         stage('Build App (CI)') {
             steps {
