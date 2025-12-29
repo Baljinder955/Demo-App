@@ -48,7 +48,7 @@ pipeline {
 
         stage('Build App (CI)') {
             steps {
-                echo "🚀 CI build (unsigned)..."
+                  echo "🚀 Building iOS app (no signing)..."
                 sh 'bundle exec fastlane build_ci'
                 echo "🎉 CI build complete"
             }
