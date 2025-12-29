@@ -11,6 +11,7 @@
 		17A5976F2EFE9ACB00803DDB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 17A5976B2EFE9ACB00803DDB /* README.md */; };
 		17A597722EFE9ACB00803DDB /* Gemfile in Resources */ = {isa = PBXBuildFile; fileRef = 17A597682EFE9ACB00803DDB /* Gemfile */; };
 		17A597742EFE9ACB00803DDB /* Jenkinsfile in Resources */ = {isa = PBXBuildFile; fileRef = 17A5976A2EFE9ACB00803DDB /* Jenkinsfile */; };
+		17F6264C2F024CD800F0647E /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 17F6264B2F024CD800F0647E /* ExportOptions.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		17A597692EFE9ACB00803DDB /* Gemfile.lock */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gemfile.lock; sourceTree = "<group>"; };
 		17A5976A2EFE9ACB00803DDB /* Jenkinsfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Jenkinsfile; sourceTree = "<group>"; };
 		17A5976B2EFE9ACB00803DDB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		17F6264B2F024CD800F0647E /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExportOptions.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -66,6 +68,7 @@
 		174935252EFBEEB500DA5C4C = {
 			isa = PBXGroup;
 			children = (
+				17F6264B2F024CD800F0647E /* ExportOptions.plist */,
 				17A597602EFE9ACB00803DDB /* build */,
 				17A597672EFE9ACB00803DDB /* fastlane */,
 				17A597682EFE9ACB00803DDB /* Gemfile */,
@@ -156,6 +159,7 @@
 				17A5976F2EFE9ACB00803DDB /* README.md in Resources */,
 				17A597722EFE9ACB00803DDB /* Gemfile in Resources */,
 				17A597742EFE9ACB00803DDB /* Jenkinsfile in Resources */,
+				17F6264C2F024CD800F0647E /* ExportOptions.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
