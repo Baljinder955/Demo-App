@@ -15,25 +15,25 @@
 
 default_platform(:ios)
 
-platform :ios do
-
+  platform :ios do
   desc "🚀 CI build (unsigned)"
   lane :build_ci do
     gym(
-      project: "Demo-App.xcodeproj",
-      scheme: "Demo-App",               # ⚠️ UPDATE IF YOUR SCHEME NAME IS DIFFERENT
+      project: "SpeechToText.xcodeproj",
+      scheme: "SpeechToText",
       configuration: "Debug",
-      clean: true,
       export_method: "development",
-      skip_codesigning: true
+      team_id: "R6Q7H67G9C",               # ← USE YOUR TEAM ID
+      codesigning_identity: "Apple Development",
+      skip_codesigning: false
     )
   end
 
   desc "🔐 Signed IPA (Development)"
   lane :ci_signed do
     gym(
-      project: "Demo-App.xcodeproj",
-      scheme: "Demo-App",               # ⚠️ UPDATE IF DIFFERENT
+      project: "SpeechToText.xcodeproj",
+      scheme: "SpeechToText",               # ⚠️ UPDATE IF DIFFERENT
       configuration: "Release",
       clean: true,
       export_method: "development"

