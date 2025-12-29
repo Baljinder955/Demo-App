@@ -70,12 +70,13 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            when { expression { false } } // skip for now
-            steps {
-                echo "🧪 Tests skipped."
-            }
-        }
+stage('Run Tests') {
+    steps {
+        echo "🧪 Running Unit Tests..."
+        sh "bundle exec fastlane run_tests"
+    }
+}
+
     }
 
     post {
