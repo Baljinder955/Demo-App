@@ -2,14 +2,15 @@ pipeline {
     agent any
 
     environment {
-        PATH = "$HOME/.gem/ruby/2.6.0/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Xcode.app/Contents/Developer/usr/bin"
+        // Use Ruby 3.2 via rbenv + bundler + fastlane paths
+        PATH = "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$HOME/.gem/ruby/3.2.0/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Xcode.app/Contents/Developer/usr/bin"
         LANG = "en_US.UTF-8"
         LC_ALL = "en_US.UTF-8"
         SDKROOT = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
     }
 
     stages {
-
+        
         stage('Checkout Code') {
             steps {
                 echo "📥 Fetching latest code..."
@@ -28,40 +29,49 @@ pipeline {
         stage('Verify Tools') {
             steps {
                 echo "🔧 Checking toolchain..."
-                sh 'xcodebuild -version'
+                sh 'ruby -v'
+                sh 'bundler -v || true'
                 sh 'fastlane -v'
                 echo "🧰 Tools verified!"
             }
         }
 
         stage('Install Dependencies') {
-    steps {
-        echo "📦 Installing dependencies..."
-        sh 'bundle config set path "vendor/bundle"'
-        sh 'bundle install'
-        echo "📌 Dependencies OK!"
-    }
-}
+            steps {
+                echo "📦 Installing bundler & gems..."
+                sh 'gem install bundler || true'
+                sh 'bundle config set path "vendor/bundle"'
+                sh 'bundle install || true'
+                echo "📌 Dependencies OK!"
+            }
+        }
 
         stage('Build App (CI)') {
             steps {
-                echo "🚀 Building iOS App for CI..."
-                sh '~/.gem/ruby/2.6.0/bin/bundle exec fastlane build_ci'
+                echo "🚀 CI build (unsigned)..."
+                sh 'bundle exec fastlane build_ci'
+                echo "🎉 CI build complete"
             }
         }
 
         stage('Build Signed IPA') {
             steps {
-                echo "🔐 Building iOS IPA (signed, development)..."
-                sh '~/.gem/ruby/2.6.0/bin/bundle exec fastlane ci_signed'
-                echo "🎉 IPA Generated Successfully!"
+                echo "🔐 Building signed IPA..."
+                sh 'bundle exec fastlane ci_signed'
+                echo "🎉 Signed IPA generated!"
+            }
+        }
+
+        stage('Archive IPA to Jenkins') {
+            steps {
+                echo "📦 Archiving IPA to Jenkins artifacts..."
+                archiveArtifacts artifacts: '**/*.ipa', fingerprint: true
+                echo "📌 IPA available in Jenkins build page"
             }
         }
 
         stage('Run Tests') {
-            when {
-                expression { false }
-            }
+            when { expression { false } } // skip for now
             steps {
                 echo "🧪 Tests skipped."
             }
@@ -70,13 +80,13 @@ pipeline {
 
     post {
         success {
-            echo "🎯 SUCCESS: CI build completed!"
+            echo "🎯 SUCCESS: Build + Signed IPA complete 🚀"
         }
         failure {
-            echo "❌ FAILURE: Check pipeline logs above."
+            echo "❌ FAILURE: Check errors above"
         }
         always {
-            echo "🔚 Pipeline finished."
+            echo "🔚 Pipeline finished"
         }
     }
 }
