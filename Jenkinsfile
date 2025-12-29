@@ -7,7 +7,9 @@ pipeline {
         DEVICE = "iPhone 16e"
         DESTINATION = "platform=iOS Simulator,name=iPhone 16e,OS=latest"
         DERIVED_DATA = "${WORKSPACE}/DerivedData"
-        PATH = "/opt/homebrew/bin:/usr/local/bin:$PATH" // ensures pod & xcode tools found
+        
+        // PATH FIX -> ensures xcpretty + pod + brew binaries are found
+        PATH = "/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
     }
 
     stages {
@@ -30,7 +32,8 @@ pipeline {
                 echo "📱 Booting $DEVICE ..."
                 xcrun simctl boot "$DEVICE" || true
                 sleep 5
-                xcrun simctl bootstatus "$DEVICE" --timeout 20 || true
+                xcrun simctl bootstatus "$DEVICE" || true
+                
                 echo "📱 Simulator ready!"
                 """
             }
