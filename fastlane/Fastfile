@@ -13,56 +13,31 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-
 default_platform(:ios)
 
 platform :ios do
 
-  desc "Build and export signed IPA (Development)"
-  lane :ci_signed do
-    build_app(
-      scheme: "SpeechToText",
-      workspace: "SpeechToText.xcodeproj", 
-      export_method: "development",
-      export_options: {
-        provisioningProfiles: {
-          "com.netset.test" => "Xcode Managed Profile"
-        }
-      }
-    )
-  end
-
-end
-
-
-
-  ######################################################
-  # 🧪 Test Lane (renamed to avoid conflict)
-  ######################################################
-  desc "🧪 Run tests for CI"
-  lane :ci_tests do
-    scan(
-      project: "SpeechToText.xcodeproj",   # or workspace if needed
-      scheme: "SpeechToText",
-      clean: true
-    )
-    UI.success("🧪 Test execution completed")
-  end
-
-
-  ######################################################
-  # 👨‍💻 Local Build (optional)
-  ######################################################
-  desc "👨‍💻 Local debug build"
-  lane :build_local do
+  desc "🚀 CI build (unsigned)"
+  lane :build_ci do
     gym(
-      project: "SpeechToText.xcodeproj",
-      scheme: "SpeechToText",
+      project: "Demo-App.xcodeproj",
+      scheme: "Demo-App",               # ⚠️ UPDATE IF YOUR SCHEME NAME IS DIFFERENT
       configuration: "Debug",
-      skip_codesigning: true,
-      export_method: nil
+      clean: true,
+      export_method: "development",
+      skip_codesigning: true
     )
-    UI.message("📦 Local build done")
+  end
+
+  desc "🔐 Signed IPA (Development)"
+  lane :ci_signed do
+    gym(
+      project: "Demo-App.xcodeproj",
+      scheme: "Demo-App",               # ⚠️ UPDATE IF DIFFERENT
+      configuration: "Release",
+      clean: true,
+      export_method: "development"
+    )
   end
 
 end
