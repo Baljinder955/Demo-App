@@ -57,7 +57,7 @@ pipeline {
         stage('Build Signed IPA') {
             steps {
                 echo "🔐 Building signed IPA..."
-                sh 'bundle exec fastlane ci_signed'
+                sh 'bundle exec fastlane ipa_local_signed'
                 echo "🎉 Signed IPA generated!"
             }
         }
