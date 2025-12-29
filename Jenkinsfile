@@ -35,14 +35,13 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            steps {
-                echo "📦 Installing dependencies..."
-                sh 'gem install --user-install bundler:4.0.3 || true'
-                sh 'bundle config set path .bundle'
-                sh 'bundle install || true'
-                echo "📌 Dependencies OK!"
-            }
-        }
+    steps {
+        echo "📦 Installing dependencies..."
+        sh 'bundle config set path "vendor/bundle"'
+        sh 'bundle install'
+        echo "📌 Dependencies OK!"
+    }
+}
 
         stage('Build App (CI)') {
             steps {
