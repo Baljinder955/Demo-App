@@ -2,11 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Correct PATH for macOS + Xcode + Fastlane
         PATH = "/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Xcode.app/Contents/Developer/usr/bin"
         LANG = "en_US.UTF-8"
         LC_ALL = "en_US.UTF-8"
-        // Set SDK to avoid simulator or xcrun errors
         SDKROOT = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
     }
 
@@ -20,7 +18,7 @@ pipeline {
                     branches: [[name: '*/main']],
                     userRemoteConfigs: [[
                         url: 'https://github.com/Baljinder955/Demo-App.git',
-                        credentialsId: 'Baljinder'   // Your Jenkins credential ID
+                        credentialsId: 'Baljinder'
                     ]]
                 ])
                 echo "✅ Checkout completed!"
@@ -39,33 +37,30 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo "📦 Installing dependencies..."
-                sh 'bundle install || true'   // skip if no Gemfile
+                sh 'gem install bundler:4.0.3 || true'
+                sh 'bundle install || true'
                 echo "📌 Dependencies OK!"
             }
         }
 
-        stage('Build App (No Signing)') {
+        stage('Build App (CI)') {
             steps {
-                echo "🚀 Building iOS App (unsigned)..."
-                sh 'fastlane build_nosign'
-                echo "🎉 Build completed!"
+                echo "🚀 Building iOS App for CI..."
+                sh 'bundle exec fastlane build_ci'
             }
         }
 
         stage('Run Tests') {
-            when {
-                expression { false } // disabled for now – enable when ready
-            }
+            when { expression { false } } // disabled for now
             steps {
-                echo "🧪 Tests skipped for now."
-                // sh 'xcodebuild test ...'
+                echo "🧪 Tests skipped."
             }
         }
     }
 
     post {
         success {
-            echo "🎯 SUCCESS: Build finished without signing!"
+            echo "🎯 SUCCESS: CI build completed!"
         }
         failure {
             echo "❌ FAILURE: Check pipeline logs above."
