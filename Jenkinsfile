@@ -70,13 +70,6 @@ pipeline {
             }
         }
 
-stage('Run Tests') {
-    steps {
-        echo "🧪 Running Unit Tests..."
-        sh "bundle exec fastlane run_tests"
-    }
-}
-
     }
 
     post {

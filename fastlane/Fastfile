@@ -62,5 +62,4 @@ platform :ios do
     UI.success("🎉 Signed IPA Created at ./ipa_signed/SpeechToText-signed.ipa")
   end
 
-
 end
