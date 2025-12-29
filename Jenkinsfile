@@ -4,7 +4,7 @@ pipeline {
     environment {
         PROJECT = "SpeechToText.xcodeproj"
         SCHEME = "SpeechToText"
-        DESTINATION = "platform=iOS Simulator,name=iPhone 14"
+        DESTINATION = "platform=iOS Simulator,name=iPhone 16e"
         DERIVED_DATA = "${WORKSPACE}/DerivedData"
     }
 
