@@ -7,9 +7,6 @@ pipeline {
         DEVICE = "iPhone 16e"
         DESTINATION = "platform=iOS Simulator,name=iPhone 16e,OS=latest"
         DERIVED_DATA = "${WORKSPACE}/DerivedData"
-
-        // 👇 Correct PATH extension for Jenkins (fixes your error)
-        PATH+EXTRA = "/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin"
     }
 
     stages {
@@ -22,35 +19,34 @@ pipeline {
             }
         }
 
+        stage("Fix PATH for Jenkins") {
+            steps {
+                echo "🔧 Fixing PATH so xcpretty & brew work..."
+                sh '''
+                  export PATH="/Users/baljindernetset/.gem/ruby/3.2.0/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+                  which xcpretty || echo "🚨 xcpretty not found in PATH"
+                  which xcodebuild || echo "🚨 xcodebuild not found in PATH"
+                '''
+            }
+        }
+        
         stage("Prepare Simulator") {
             steps {
                 echo "📱 Preparing iOS Simulator..."
                 sh """
-                echo '🔍 Listing devices...'
                 xcrun simctl list devices
-
-                echo '📱 Booting $DEVICE...'
                 xcrun simctl boot "$DEVICE" || true
                 sleep 5
-
-                echo '⏳ Waiting for boot status...'
                 xcrun simctl bootstatus "$DEVICE" || true
-
-                echo '📱 Simulator ready!'
                 """
             }
         }
 
         stage("Install Dependencies") {
             steps {
-                echo "📦 Checking for Podfile..."
+                echo "📦 Checking Podfile..."
                 sh """
-                if [ -f "Podfile" ]; then
-                    echo '➡️ Podfile found. Running pod install...'
-                    pod install
-                else
-                    echo '⚠️ No Podfile found — skipping.'
-                fi
+                if [ -f Podfile ]; then pod install; fi
                 """
             }
         }
@@ -59,40 +55,26 @@ pipeline {
             steps {
                 echo "🔨 Building the app..."
                 sh """
-                time xcodebuild \
-                -project "$PROJECT" \
-                -scheme "$SCHEME" \
-                -sdk iphonesimulator \
-                -destination "$DESTINATION" \
-                -derivedDataPath "$DERIVED_DATA" \
-                CODE_SIGNING_ALLOWED=NO \
-                clean build | xcpretty
+                export PATH="/Users/baljindernetset/.gem/ruby/3.2.0/bin:$PATH"
+                xcodebuild -project "$PROJECT" -scheme "$SCHEME" -sdk iphonesimulator -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO clean build | xcpretty
                 """
-                echo "🧱 App Build Success!"
             }
         }
 
         stage("Run Tests") {
             steps {
-                echo "🧪 Running test suite..."
+                echo "🧪 Running tests..."
                 sh """
-                time xcodebuild \
-                test \
-                -project "$PROJECT" \
-                -scheme "$SCHEME" \
-                -sdk iphonesimulator \
-                -destination "$DESTINATION" \
-                -derivedDataPath "$DERIVED_DATA" \
-                CODE_SIGNING_ALLOWED=NO | xcpretty
+                export PATH="/Users/baljindernetset/.gem/ruby/3.2.0/bin:$PATH"
+                xcodebuild test -project "$PROJECT" -scheme "$SCHEME" -sdk iphonesimulator -destination "$DESTINATION" CODE_SIGNING_ALLOWED=NO | xcpretty
                 """
-                echo "🧪 Tests finished!"
             }
         }
     }
 
     post {
-        success { echo "🎉 SUCCESS: Local CI build and tests completed!" }
-        failure { echo "❌ ERROR: Pipeline failed — check logs above!" }
-        always  { echo "🔚 Pipeline execution complete." }
+        success { echo "🎉 SUCCESS: Local CI OK!" }
+        failure { echo "❌ ERROR: Pipeline failed — check logs!" }
+        always  { echo "🔚 Pipeline done." }
     }
 }
