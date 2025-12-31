@@ -56,33 +56,30 @@ platform :ios do
     UI.success("🎉 Signed IPA Created at ./ipa_signed/SpeechToText-signed.ipa")
   end
 
-    desc "🎉 Upload build to TestFlight"
-  lane :release do
-    build_app(
-      project: "SpeechToText.xcodeproj",
-      scheme: "SpeechToText",
-      export_method: "app-store",
-      output_directory: "./build",
-      output_name: "SpeechToText.ipa",
-      export_options: {
-        provisioningProfiles: {
-          "com.netset.test" => "com.netset.test AppStore"
-        }
-      },
-      export_xcargs: "DEVELOPMENT_TEAM=JFWPJ5FTY4"
-    )
+   desc "Upload build to TestFlight"
+lane :release do
+  build_app(
+    project: "SpeechToText.xcodeproj",
+    scheme: "SpeechToText",
+    export_method: "app-store",
+    export_options: {
+      method: "app-store",
+      signingStyle: "automatic"
+    },
+    export_xcargs: "DEVELOPMENT_TEAM=JFWPJ5FTY4 CODE_SIGN_STYLE=Automatic"
+  )
 
-    upload_to_testflight(
-      api_key: app_store_connect_api_key(
-        key_id: ENV["ASC_KEY_ID"],
-        issuer_id: ENV["ASC_ISSUER_ID"],
-        key_filepath: ENV["ASC_API_KEY_FILE"]
-      ),
-      skip_waiting_for_build_processing: true
-    )
+  upload_to_testflight(
+    api_key: app_store_connect_api_key(
+      key_id: ENV["ASC_KEY_ID"],
+      issuer_id: ENV["ASC_ISSUER_ID"],
+      key_filepath: ENV["ASC_API_KEY_FILE"]
+    ),
+    skip_waiting_for_build_processing: true
+  )
 
-    UI.success("🎉 Build successfully uploaded to TestFlight! 🚀")
-  end
+  UI.success("🎉 Build successfully uploaded to TestFlight! 🚀")
+end
 
 
 end
