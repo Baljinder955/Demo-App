@@ -13,7 +13,7 @@ pipeline {
         
         stage('Checkout Code') {
             steps {
-                echo "📥 Fetching latest code..."
+                echo "Fetching latest code..."
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/main']],

