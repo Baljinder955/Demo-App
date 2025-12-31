@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Use Ruby 3.2 via rbenv + bundler + fastlane paths
+        
         PATH = "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$HOME/.gem/ruby/3.2.0/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Xcode.app/Contents/Developer/usr/bin"
         LANG = "en_US.UTF-8"
         LC_ALL = "en_US.UTF-8"
