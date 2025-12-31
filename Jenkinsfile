@@ -7,6 +7,9 @@ pipeline {
         LANG = "en_US.UTF-8"
         LC_ALL = "en_US.UTF-8"
         SDKROOT = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+ASC_KEY_ID = credentials('ASC_KEY_ID')
+    ASC_ISSUER_ID = credentials('ASC_ISSUER_ID')
+    ASC_API_KEY_FILE = credentials('ASC_API_KEY_FILE')
     }
 
     stages {
@@ -69,6 +72,14 @@ pipeline {
                 echo "📌 IPA available in Jenkins build page"
             }
         }
+
+stage('Upload to TestFlight') {
+    steps {
+        echo "🚀 Uploading to TestFlight..."
+        sh 'bundle exec fastlane release'
+    }
+}
+
 
     }
 

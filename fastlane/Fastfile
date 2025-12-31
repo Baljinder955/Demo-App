@@ -28,9 +28,6 @@ platform :ios do
     UI.success("🎉 Build completed successfully! (No signing, no IPA)")
   end
 
-  # ------------------------------------------
-  # 📌 NEW LANE: Create IPA (unsigned)
-  # ------------------------------------------
   desc "📦 Build unsigned IPA (local)"
   lane :ipa_local_unsigned do
     gym(
@@ -45,21 +42,41 @@ platform :ios do
     UI.success("🎉 Unsigned IPA Created at ./build/SpeechToText-unsigned.ipa")
   end
 
-  # ------------------------------------------
-  # 📌 NEW LANE: Create Signed IPA (needs team id)
-  # ------------------------------------------
-  desc "🔐 Build Signed IPA for devices"
+  desc "🔐 Build Signed IPA"
   lane :ipa_local_signed do
     gym(
       project: "SpeechToText.xcodeproj",
       scheme: "SpeechToText",
       configuration: "Release",
       export_method: "development",
-      export_xcargs: "DEVELOPMENT_TEAM=YOUR_TEAM_ID",
+      export_xcargs: "DEVELOPMENT_TEAM=JFWPJ5FTY4",
       output_directory: "./ipa_signed",
       output_name: "SpeechToText-signed"
     )
     UI.success("🎉 Signed IPA Created at ./ipa_signed/SpeechToText-signed.ipa")
+  end
+
+  # 🚀 UPLOAD TO TESTFLIGHT
+  desc "Upload build to TestFlight"
+  lane :release do
+    build_app(
+      project: "SpeechToText.xcodeproj",
+      scheme: "SpeechToText",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "SpeechToText.ipa"
+    )
+
+    upload_to_testflight(
+      api_key: app_store_connect_api_key(
+        key_id: ENV["ASC_KEY_ID"],
+        issuer_id: ENV["ASC_ISSUER_ID"],
+        key_filepath: ENV["ASC_API_KEY_FILE"]
+      ),
+      skip_waiting_for_build_processing: true
+    )
+
+    UI.success("🎉 Build successfully uploaded to TestFlight! 🚀")
   end
 
 end
